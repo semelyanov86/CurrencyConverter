@@ -1,0 +1,5 @@
+{
+    "require": {
+        "andydune/currency-rate-cbr": "^1.1"
+    }
+}

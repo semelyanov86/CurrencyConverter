@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<module>
+        <type>extension</type>
+        <name>CurrencyWidget</name>
+        <label>Currency Widget</label>        
+        <version>1.0</version>
+        <dependencies>
+                <vtiger_version>7.0.0</vtiger_version>
+                <vtiger_max_version>7.*</vtiger_max_version>
+        </dependencies>
+</module>
