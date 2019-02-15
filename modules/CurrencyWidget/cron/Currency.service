@@ -1,0 +1,30 @@
+<?php
+
+require_once("includes/runtime/BaseModel.php");
+require_once("modules/Vtiger/models/Record.php");
+require_once("modules/Users/models/Record.php");
+require_once("includes/runtime/Globals.php");
+require_once("include/utils/utils.php");
+require_once("includes/runtime/LanguageHandler.php");
+require_once("includes/Loader.php");
+require_once 'modules/Settings/Currency/models/Record.php';
+require_once 'modules/CurrencyWidget/vendor/autoload.php';
+
+global $adb, $log;
+$allCurrencies = Settings_Currency_Record_Model::getAll();
+$rate = new AndyDune\CurrencyRateCbr\DailyRate();
+$isOk = $rate->retrieve();
+
+if ($isOk) {
+    foreach ($allCurrencies as $current) {
+        if ($current->get('currency_code') == 'RUB') {
+            continue;
+        }
+        $item = $rate->get($current->get('currency_code'));
+        $log->debug('CurrencyWidget: Successfully updated currency rates!');
+    }
+
+} else {
+    $log->debug('CurrencyWidget: No responce from Central Bank of Russia');
+}
+

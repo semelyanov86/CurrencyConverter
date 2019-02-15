@@ -27,7 +27,7 @@
                 </span>
                 <div class="col-lg-7">
                     <div class="input-daterange input-group dateRange widgetFilter" id="datepicker" name="createdtime">
-                        <input type="text" class="input-sm form-control" name="start" style="height:30px;"/>
+                        <input type="text" class="input-sm form-control" name="start" style="height:30px;"  value="{$CURDATE}" />
                         {*<span class="input-group-addon"></span>*}
                         <input type="text" class="" name="end" style="height:0px; width: 0px;"/>
                     </div>
@@ -47,7 +47,7 @@
                     <select class="select2 col-sm-12 widgetFilter reloadOnChange" multiple name="currencies">
                         {foreach from=$FULLRATES key=KEY item=RATE}
                             {assign var=CURCURRENCY value=$RATEMODEL->get($KEY)}
-                        <option value="{$KEY}">{$CURCURRENCY->getName()}</option>
+                        <option value="{$KEY}"  {if $KEY|in_array:$RATES} selected {/if}>{$CURCURRENCY->getName()}</option>
                         {/foreach}
                     </select>
                 </span>

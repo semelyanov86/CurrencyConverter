@@ -2,13 +2,26 @@
 require_once 'modules/CurrencyWidget/vendor/autoload.php';
 class CurrencyWidget_CurrencyWidget_Dashboard extends Vtiger_IndexAjax_View {
 
-    public $rates = array('usd', 'eur', 'aud', 'gbp');
+    public $rates = array();
 
     public function process(Vtiger_Request $request) {
         global $currentModule;
         $createdtime = $request->get('createdtime');
         $currencies = $request->get('currencies');
-//        var_dump($createdtime, $currencies);die;
+        $allCurrencies = Settings_Currency_Record_Model::getAll();
+        $array_rates = array();
+        if (count($allCurrencies) > 1) {
+            foreach ($allCurrencies as $current) {
+                if ($current->get('currency_code') == 'RUB') {
+                    continue;
+                }
+                $array_rates[] = $current->get('currency_code');
+            }
+        } else {
+            $array_rates[] = 'USD';
+        }
+        $this->rates = $array_rates;
+
         if (!$createdtime) {
             $date = date('Y-m-d H:i:s');
         } else {
@@ -43,6 +56,7 @@ class CurrencyWidget_CurrencyWidget_Dashboard extends Vtiger_IndexAjax_View {
         $viewer->assign("ISOK", $isOk);
         $viewer->assign("MODULE", $qualifiedModuleName);
         $viewer->assign("CREATEDTIME", $createdtime);        
+        $viewer->assign("CURDATE", DateTimeField::convertToUserFormat(date('Y-m-d')));
         $viewer->assign("QUALIFIED_MODEL", $qualifiedModuleModel);
         $viewer->assign("MODULE_NAME", $qualifiedModuleName);
         $viewer->assign("RATES", $this->rates);
