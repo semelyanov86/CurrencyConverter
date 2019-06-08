@@ -10,7 +10,7 @@ class CurrencyWidget {
 		
 		if ($eventType == 'module.postinstall') {
 			$potentials = Vtiger_Module::getInstance('Home');
-			$potentials->addLink('DASHBOARDWIDGET', 'Курс валют', 'index.php?module=CurrencyWidget&view=ShowWidget&name=CurrencyWidget','', '7');
+			$potentials->addLink('DASHBOARDWIDGET', 'Курсы валют', 'index.php?module=CurrencyWidget&view=ShowWidget&name=CurrencyWidget','', '7');
             global $vtiger_current_version;
             $widgetType = "HEADERSCRIPT";
             $widgetName = "CurrencyWidgetJs";

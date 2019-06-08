@@ -52,12 +52,12 @@ Vtiger.Class("CurrencyWidget_Js", {
            e.preventDefault();
            app.request.post({data: params}).then(
                function (err,data) {
-                   console.log(err,data);
-                   if(err == null){
+                   if(!err){
                         app.helper.showSuccessNotification({message: 'Курсы были успешно обновлены'});
                         location.reload();
                    } else {
-                       app.helper.showErrorMessage('Ошибка получения данных с сервера ЦБ');
+                       app.helper.showErrorNotification({'message' : 'Ошибка получения данных с сервера ЦБ'});
+                       // app.helper.showErrorMessage('Ошибка получения данных с сервера ЦБ');
                    }
                    app.helper.hideProgress();
                },

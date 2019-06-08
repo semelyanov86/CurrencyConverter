@@ -6,6 +6,7 @@ class CurrencyWidget_CurrencyWidget_Dashboard extends Vtiger_IndexAjax_View {
 
     public function process(Vtiger_Request $request) {
         global $currentModule;
+        global $timeZone;
         $createdtime = $request->get('createdtime');
         $currencies = $request->get('currencies');
         $allCurrencies = Settings_Currency_Record_Model::getAll();
@@ -21,12 +22,16 @@ class CurrencyWidget_CurrencyWidget_Dashboard extends Vtiger_IndexAjax_View {
             $array_rates[] = 'USD';
         }
         $this->rates = $array_rates;
-
-        if (!$createdtime) {
-            $date = date('Y-m-d H:i:s');
-        } else {
-            $date = $createdtime['start'];
+        $date = date('Y-m-d H:i:s');
+        if ($createdtime) {
+            $endDate = explode(' ', $createdtime['start']);
+            $endTime = explode(' ', $date);
+            $fixDate = date_create($endDate[0]);
+            date_add($fixDate, date_interval_create_from_date_string('1 day'));
+            $fixDate = date_format($fixDate, 'Y-m-d');
+            $date = $fixDate . ' ' . $endTime[1];
         }
+//        var_dump($date);die;
         if ($currencies) {
             $this->rates = $currencies;
         }
@@ -40,10 +45,10 @@ class CurrencyWidget_CurrencyWidget_Dashboard extends Vtiger_IndexAjax_View {
         $isOk = $rate->retrieve(); // true если данные успешно получены
 
         // Извлекаем курс доллара
-/*        if ($isOk) {
-            $item = $rate->get('usd');
-            var_dump($item);die;
-        }*/
+        /*        if ($isOk) {
+                    $item = $rate->get('usd');
+                    var_dump($item);die;
+                }*/
         $currentUser = Users_Record_Model::getCurrentUserModel();
 
         $qualifiedModuleName = $request->get("module");
@@ -55,7 +60,7 @@ class CurrencyWidget_CurrencyWidget_Dashboard extends Vtiger_IndexAjax_View {
         $viewer->assign('WIDGET', $widget);
         $viewer->assign("ISOK", $isOk);
         $viewer->assign("MODULE", $qualifiedModuleName);
-        $viewer->assign("CREATEDTIME", $createdtime);        
+        $viewer->assign("CREATEDTIME", $createdtime);
         $viewer->assign("CURDATE", DateTimeField::convertToUserFormat(date('Y-m-d')));
         $viewer->assign("QUALIFIED_MODEL", $qualifiedModuleModel);
         $viewer->assign("MODULE_NAME", $qualifiedModuleName);
@@ -71,7 +76,7 @@ class CurrencyWidget_CurrencyWidget_Dashboard extends Vtiger_IndexAjax_View {
 
     }
 
- 
+
     protected function getGroupsIdsForUsers($userId)
     {
         vimport("~~/include/utils/GetUserGroups.php");

@@ -26,10 +26,10 @@
                     </span>
                 </span>
                 <div class="col-lg-7">
-                    <div class="input-daterange input-group dateRange widgetFilter" id="datepicker" name="createdtime">
-                        <input type="text" class="input-sm form-control" name="start" style="height:30px;"  value="{$CURDATE}" />
+                    <div class="input-daterange input-group dateRange widgetFilter" data-date-multidate="false" data-date-end-date="0d" id="datepicker" name="createdtime">
+                        <input type="text" class="input-sm form-control" data-date-multidate="false" data-date-end-date="0d" name="start" style="height:30px;"  value="{$CURDATE}" />
                         {*<span class="input-group-addon"></span>*}
-                        <input type="text" class="" name="end" style="height:0px; width: 0px;"/>
+                        <input type="text" class="" name="end" data-date-end-date="0d" data-date-multidate="false" style="height:0px; width: 0px;" hidden/>
                     </div>
                 </div>
             </div>
@@ -47,15 +47,25 @@
                     <select class="select2 col-sm-12 widgetFilter reloadOnChange" multiple name="currencies">
                         {foreach from=$FULLRATES key=KEY item=RATE}
                             {assign var=CURCURRENCY value=$RATEMODEL->get($KEY)}
-                        <option value="{$KEY}"  {if $KEY|in_array:$RATES} selected {/if}>{$CURCURRENCY->getName()}</option>
+                            <option value="{$KEY}"  {if $KEY|in_array:$RATES} selected {/if}>{$CURCURRENCY->getName()}</option>
                         {/foreach}
                     </select>
                 </span>
             </div>
         </div>
     </div>
-<div class="widgeticons dashBoardWidgetFooter">
-    <div class="footerIcons pull-right">
-        {include file="dashboards/DashboardFooterIcons.tpl"|@vtemplate_path:$MODULE_NAME SETTING_EXIST=true}
+    <div class="widgeticons dashBoardWidgetFooter">
+        <div class="footerIcons pull-right">
+            {include file="dashboards/DashboardFooterIcons.tpl"|@vtemplate_path:$MODULE_NAME SETTING_EXIST=true}
+        </div>
     </div>
-</div>
+    {literal}
+    <script>
+        function setDateParams() {
+
+            jQuery('.select2-search-field').prop('hidden', true)
+        }
+
+        setTimeout(setDateParams, 3000);
+    </script>
+{/literal}
